@@ -1,4 +1,4 @@
-FROM golang:1.20.3-bullseye
+FROM golang:1.20.3
 
 # Set environment variables
 ENV PATH="/root/.cargo/bin:${PATH}"
@@ -17,7 +17,5 @@ COPY . .
 
 RUN cd /go/pkg/mod/github.com/j178/tiktoken-go@v0.2.1/tiktoken-cffi && \
     cargo build --release
-
-RUN mkdir -p /go/src/vendor/github.com/j178/tiktoken-go/tiktoken-cffi/target/release
 
 CMD [ "tail", "-f", "/dev/null" ]
