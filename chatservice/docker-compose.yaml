@@ -4,6 +4,8 @@ services:
   chatservice:
     build: .
     container_name: chatservice_app
+    depends_on:
+      - mysql
     volumes:
       - .:/go/src
     ports:

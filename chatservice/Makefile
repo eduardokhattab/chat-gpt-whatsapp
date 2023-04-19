@@ -1,6 +1,3 @@
-install-mock:
-	go install github.com/golang/mock/mockgen@latest
-
 migrate:
 	migrate -path=sql/migrations -database "mysql://root:root@tcp(localhost:3306)/chat_test" -verbose up
 
@@ -12,5 +9,8 @@ createmigration:
 
 grpc:
 	protoc --go_out=. --go-grpc_out=. --experimental_allow_proto3_optional proto/chat.proto
+
+tests:
+	docker-compose up -d && docker-compose exec chatservice go test ./... && docker-compose down
 
 .PHONY: install-mock migrate createmigration migratedown grpc

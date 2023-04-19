@@ -3,53 +3,58 @@ package entity_test
 import (
 	"chatservice/internal/domain/entity"
 	"testing"
+
+	"github.com/stretchr/testify/mock"
 )
 
-func TestAddMessageShouldThrowErrorWhenMessageIsTooLarge(t *testing.T) {
-	userID := "510ae7e0-4122-49e3-9384-68fa573c2afc"
-	modelName := "gpt-3.5-turbo"
-	model := newModel(modelName)
+var (
+	modelName      = "gpt-3.5-turbo"
+	modelMaxTokens = 10
+	model          = entity.NewModel(modelName, modelMaxTokens)
+	chatConfig     = &entity.ChatConfig{Model: model, Temperature: 1}
 
-	systemRole := "system"
-	initialMessageContent := "InitialMessageContent"
-	// mockController := gomock.NewController(t)
-	// mock := mocks.NewMockTikToken(mockController)
-	// mock.EXPECT().CountTokens(modelName, initialMessageContent).Return(9)
+	userID     = "510ae7e0-4122-49e3-9384-68fa573c2afc"
+	systemRole = "system"
+	userRole   = "user"
 
-	initialMessage := newMessage(systemRole, initialMessageContent, model)
-	chatConfig := newChatConfig(model)
+	basicMessageContent    = "BasicMessageContent"
+	messageTooLargeContent = "MessageTooLargeContent"
+
+	mockTikToken = &MockTikToken{}
+)
+
+type MockTikToken struct {
+	mock.Mock
+}
+
+func (m *MockTikToken) CountTokens(model, prompt string) int {
+	args := m.Called(model, prompt)
+	return args.Int(0)
+}
+
+func TestAddMessageShouldNotThrowErrorWhenMessageIsTooLarge(t *testing.T) {
+	mockTikToken.On("CountTokens", model.Name, basicMessageContent).Return(2)
+
+	initialMessage := newMessage(systemRole, basicMessageContent, model)
 
 	chat, err := newChat(userID, initialMessage, chatConfig)
 	if err != nil {
 		t.Fatal("error creating chat")
 	}
 
-	userRole := "user"
-	messageTooLargeContent := "TooLargeMessage"
+	mockTikToken.On("CountTokens", model.Name, messageTooLargeContent).Return(99)
 	messageTooLarge := newMessage(userRole, messageTooLargeContent, model)
-	// mock.EXPECT().CountTokens(modelName, messageTooLarge).Return(2)
 
-	chat.AddMessage(messageTooLarge)
+	err = chat.AddMessage(messageTooLarge)
 	if err != nil {
 		t.Fatal("error adding message to chat")
 	}
 }
 
-func newModel(modelName string) *entity.Model {
-	return entity.NewModel(modelName, 10)
-}
-
 func newMessage(role, content string, model *entity.Model) *entity.Message {
-	message, _ := entity.NewMessage(role, content, model)
+	message, _ := entity.NewMessage(role, content, mockTikToken, model)
 
 	return message
-}
-
-func newChatConfig(model *entity.Model) *entity.ChatConfig {
-	return &entity.ChatConfig{
-		Model:       model,
-		Temperature: 1,
-	}
 }
 
 func newChat(userID string, initialMessage *entity.Message, chatConfig *entity.ChatConfig) (*entity.Chat, error) {
