@@ -5,6 +5,7 @@ import (
 	"chatservice/internal/infra/grpc/service"
 	"chatservice/internal/usecase/chatcompletionstream"
 	"net"
+	"strings"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -55,7 +56,16 @@ func (g *GRPCServer) AuthInterceptor(srv interface{}, ss grpc.ServerStream, info
 		return status.Error(codes.Unauthenticated, "authorization token is invalid")
 	}
 
-	return handler(srv, ss)
+	err := handler(srv, ss)
+	if err != nil {
+		if strings.Contains(err.Error(), "message too large") {
+			return status.Error(codes.InvalidArgument, err.Error())
+		}
+
+		return status.Errorf(codes.Internal, "internal error %v", err)
+	}
+
+	return nil
 }
 
 func (g *GRPCServer) Start() {
