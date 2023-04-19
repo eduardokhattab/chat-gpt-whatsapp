@@ -38,7 +38,10 @@ func NewChat(userID string, initialSystemMessage *Message, chatConfig *ChatConfi
 		TokenUsage:           0,
 	}
 
-	chat.AddMessage(initialSystemMessage)
+	err := chat.AddMessage(initialSystemMessage)
+	if err != nil {
+		return nil, err
+	}
 
 	if err := chat.Validate(); err != nil {
 		return nil, err

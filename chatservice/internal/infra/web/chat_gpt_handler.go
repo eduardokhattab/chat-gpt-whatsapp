@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 type WebChatGPTHandler struct {
@@ -54,6 +55,11 @@ func (h *WebChatGPTHandler) Handle(w http.ResponseWriter, r *http.Request) {
 
 	result, err := h.CompletionUseCase.Execute(r.Context(), dto)
 	if err != nil {
+		if strings.Contains(err.Error(), "message too large") {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+			return
+		}
+
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
