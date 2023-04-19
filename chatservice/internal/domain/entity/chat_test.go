@@ -4,6 +4,7 @@ import (
 	"chatservice/internal/domain/entity"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -46,9 +47,8 @@ func TestAddMessageShouldNotThrowErrorWhenMessageIsTooLarge(t *testing.T) {
 	messageTooLarge := newMessage(userRole, messageTooLargeContent, model)
 
 	err = chat.AddMessage(messageTooLarge)
-	if err != nil {
-		t.Fatal("error adding message to chat")
-	}
+	errMessage := "message too large"
+	assert.EqualErrorf(t, err, errMessage, "Error should be: %v, got: %v", errMessage, err)
 }
 
 func newMessage(role, content string, model *entity.Model) *entity.Message {

@@ -52,8 +52,15 @@ func (c *Chat) AddMessage(m *Message) error {
 		return errors.New("chat is ended. No more messages allowed")
 	}
 
+	messageTotalTokens := m.GetQtdTokens()
+	modelMaxTokens := c.Config.Model.GetMaxTokens()
+
+	if messageTotalTokens > modelMaxTokens {
+		return errors.New("message too large")
+	}
+
 	for {
-		if c.Config.Model.GetMaxTokens() >= m.GetQtdTokens()+c.TokenUsage {
+		if modelMaxTokens >= messageTotalTokens+c.TokenUsage {
 			c.Messages = append(c.Messages, m)
 			c.RefreshTokenUsage()
 			break

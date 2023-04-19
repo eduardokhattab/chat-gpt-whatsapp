@@ -11,6 +11,7 @@ grpc:
 	protoc --go_out=. --go-grpc_out=. --experimental_allow_proto3_optional proto/chat.proto
 
 tests:
-	docker-compose up -d && docker-compose exec chatservice go test ./... && docker-compose down
+	- docker-compose up -d && docker-compose exec chatservice go test ./...
+	docker-compose down
 
-.PHONY: install-mock migrate createmigration migratedown grpc
+.PHONY: install-mock migrate createmigration migratedown grpc tests
