@@ -14,4 +14,4 @@ tests:
 	- docker-compose up -d && docker-compose exec chatservice go test ./...
 	docker-compose down
 
-.PHONY: install-mock migrate createmigration migratedown grpc tests
+.PHONY: migrate migratedown createmigration grpc tests
