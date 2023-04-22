@@ -9,5 +9,15 @@ services:
     volumes:
       - .:/home/node/app
 
-# docker 23.0.4
-# docker-compose v2.17.2
+  db:
+    image: mysql:8.0.30-debian
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=chat
+    volumes:
+      - .docker/dbdata:/var/lib/mysql
+    # networks:
+    #   - fcexperience
+
+    # docker 23.0.4
+    # docker-compose v2.17.2
