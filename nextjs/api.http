@@ -12,3 +12,24 @@ Content-Type: application/json
 ###
 
 GET http://localhost:3000/api/chats
+
+###
+
+@chatId = 874537f4-73ca-4f7e-a408-ba510ef5ae77
+
+GET http://localhost:3000/api/chats/{{chatId}}/messages
+
+###
+
+POST http://localhost:3000/api/chats/{{chatId}}/messages
+Content-Type: application/json
+
+{
+    "message": "oi, eu sou o Goku"
+}
+
+###
+
+@messageId = b0d4249a-510a-4e4a-8b4c-9b2b3babea69
+
+GET http://localhost:3000/api/messages/{{messageId}}/events

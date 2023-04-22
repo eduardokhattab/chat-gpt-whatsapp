@@ -8,6 +8,10 @@ services:
       - 3000:3000
     volumes:
       - .:/home/node/app
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+    # networks:
+    #   - chatservice-network
 
   db:
     image: mysql:8.0.30-debian
@@ -17,7 +21,8 @@ services:
     volumes:
       - .docker/dbdata:/var/lib/mysql
     # networks:
-    #   - fcexperience
+    #   - chatservice-network
 
-    # docker 23.0.4
-    # docker-compose v2.17.2
+# networks:
+#   chatservice-network:
+#     external: true

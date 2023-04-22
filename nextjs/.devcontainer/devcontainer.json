@@ -29,6 +29,7 @@
 				"prisma.prisma",
 				"zxh404.vscode-proto3",
 				"firsttris.vscode-jest-runner",
+				"dbaeumer.vscode-eslint",
 				"bradlc.vscode-tailwindcss"
 			]
 		}
