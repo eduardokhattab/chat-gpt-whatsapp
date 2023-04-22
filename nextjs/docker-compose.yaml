@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  nextjs:
+    build: .
+    container_name: nextjs
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/home/node/app
+
+# docker 23.0.4
+# docker-compose v2.17.2
