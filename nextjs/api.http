@@ -30,6 +30,6 @@ Content-Type: application/json
 
 ###
 
-@messageId = b0d4249a-510a-4e4a-8b4c-9b2b3babea69
+@messageId = 5897f056-94f6-4900-a598-7835d95ed4b0
 
 GET http://localhost:3000/api/messages/{{messageId}}/events
