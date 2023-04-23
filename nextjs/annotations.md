@@ -96,3 +96,9 @@ networks:
 
 </details>
 
+## Keycloak
+
+- Keycloak(localhost:9000) > Admin Console > Users > Add user > Credentials
+- Clients > Create > ClientID (nextjs) > Valid URIs (http://localhost:3000/*) > Web origins (http://localhost:3000/*)
+- Check Client Authentication (now you can go to Credentials tab) > Client Secret
+

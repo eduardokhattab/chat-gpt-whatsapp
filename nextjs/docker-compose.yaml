@@ -23,6 +23,15 @@ services:
     networks:
       - chatservice-network
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:21.0
+    command: start-dev
+    ports:
+      - 9000:8080
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+
 networks:
   chatservice-network:
     external: true
