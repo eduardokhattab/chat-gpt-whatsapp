@@ -4,9 +4,9 @@ import KeycloakProvider from 'next-auth/providers/keycloak';
 export const authConfig = {
     providers: [
         KeycloakProvider({
-            clientId: "nextjs",
-            clientSecret: "lmoJ2CPErZiPXPFNxMTU9RvFDH32w0b1",
-            issuer: "http://host.docker.internal:9000/realms/master",
+            clientId: process.env.KEYCLOAK_CLIENT_ID as string,
+            clientSecret: process.env.KEYCLOAK_CLIENT_SECRET as string,
+            issuer: process.env.KEYCLOAK_ISSUER,
         })
     ],
 };

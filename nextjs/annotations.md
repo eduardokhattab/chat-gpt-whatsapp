@@ -108,7 +108,15 @@ networks:
 
 ## Keycloak
 
+- Uses Open ID Connect (authentication protocol) and Oauth2(authorization protocol)
+
 - Keycloak(localhost:9000) > Admin Console > Users > Add user > Credentials
 - Clients > Create > ClientID (nextjs) > Valid URIs (http://localhost:3000/*) > Web origins (http://localhost:3000/*)
 - Check Client Authentication (now you can go to Credentials tab) > Client Secret
+
+- Configure `src/app/api/auth/[...nextauth]/route.ts` with the values
+
+- the keycloak generates two data: `access-token` to admin console and `id-token` the session token.
+
+- you can have multiple realms (it's like namespaces), the default is the master.
 

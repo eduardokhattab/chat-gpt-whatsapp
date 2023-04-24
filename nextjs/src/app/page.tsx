@@ -13,6 +13,8 @@ import Image from "next/image";
 import { UserIcon } from "./components/UserIcon";
 import { marked } from "marked";
 import hljs from "highlight.js";
+import { LogoutIcon } from "./components/LogoutIcon";
+import { signOut } from "next-auth/react";
 
 marked.setOptions({
   highlight: function (code: string, lang: string) {
@@ -107,28 +109,23 @@ export default function Home() {
     useSWRSubscription(
       messageId ? `/api/messages/${messageId}/events` : null,
       (path: string, { next, }) => {
-        console.log("init event source");
         const eventSource = new EventSource(path);
         eventSource.onmessage = (event) => {
-          console.log("data:", event);
           const newMessage = JSON.parse(event.data);
           next(null, newMessage.content);
         };
         eventSource.onerror = (event) => {
-          console.log("error:", event);
           eventSource.close();
           //@ts-ignore
           next(event.data, null);
         };
         eventSource.addEventListener("end", (event) => {
-          console.log("end:", event);
           eventSource.close();
           const newMessage = JSON.parse(event.data);
           mutateMessages((messages) => [...messages!, newMessage], false);
           next(null, null);
         });
         return () => {
-          console.log("close event source");
           eventSource.close();
         };
       }
@@ -197,6 +194,14 @@ export default function Home() {
     textArea.value = "";
   }
 
+  async function logout() {
+    await signOut({ redirect: false, });
+    const { url: logoutUrl, } = await ClientHttp.get(
+      `logout-url?${new URLSearchParams({ redirect: window.location.origin, })}`
+    );
+    window.location.href = logoutUrl;
+  }
+
   return (
     <div className="overflow-hidden w-full h-full relative flex">
       {/* -- sidebar -- */}
@@ -231,6 +236,13 @@ export default function Home() {
             </div>
           ))}
         </div>
+        <button
+          className="flex p-3 mt-1 gap-3 rounded hover:bg-gray-500/10 text-sm text-white"
+          onClick={() => logout()}
+        >
+          <LogoutIcon className="h-5 w-5" />
+          Log out
+        </button>
       </div>
       {/* -- end sidebar -- */}
 
@@ -268,7 +280,7 @@ export default function Home() {
                   rows={1}
                   placeholder="Digite sua pergunta"
                   className="resize-none pr-14 bg-transparent pl-0 outline-none"
-                  defaultValue="Faça uma pergunta"
+                  defaultValue="Gere uma classe de produto em JavaScript"
                 ></textarea>
                 <button
                   type="submit"

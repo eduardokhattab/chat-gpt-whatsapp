@@ -1,9 +1,11 @@
 GET http://localhost:3000/api/hello
 
+@token = eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..7UIA7JIP5SF_FqnG.CB3ZeTkb4Yq_R7LbzJ83e8GuvOT0NQwQPLkqPkNFeP72JyqtCCaL3z1h5KFDUZc_3_zR-nXHySbYSObP3RwWdPe4Te5Y8NLY_-a2_CaB4EarBDMi_f4Z56Bpyet6RQlci9NRfbdRyg0f_uZuEUuXp4aXk_G4Ka9kzP9vjQ9DXduPwkENy12a4PxbgYKT.25FdBVWBKynUNBRxUijXPg
 ###
 
 POST http://localhost:3000/api/chats
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
     "message": "Olá"
@@ -12,17 +14,20 @@ Content-Type: application/json
 ###
 
 GET http://localhost:3000/api/chats
+Authorization: Bearer {{token}}
 
 ###
 
 @chatId = 874537f4-73ca-4f7e-a408-ba510ef5ae77
 
 GET http://localhost:3000/api/chats/{{chatId}}/messages
+Authorization: Bearer {{token}}
 
 ###
 
 POST http://localhost:3000/api/chats/{{chatId}}/messages
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
     "message": "oi, eu sou o Goku"
@@ -33,3 +38,11 @@ Content-Type: application/json
 @messageId = 5897f056-94f6-4900-a598-7835d95ed4b0
 
 GET http://localhost:3000/api/messages/{{messageId}}/events
+Authorization: Bearer {{token}}
+
+###
+
+POST http://localhost:3000/api/generate-token
+Content-Type: application/json
+
+{}
