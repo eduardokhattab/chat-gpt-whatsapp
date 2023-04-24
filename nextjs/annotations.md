@@ -11,6 +11,16 @@ To connect the nextjs containers with chatservice containers, we need to integra
 <details>
 <summary>1. Create a extra_host</summary>
 
+The IP `172.17.0.1` is the default bridge address from docker. He allows us to connect the containers with our host machine
+
+You can check this address running the command from the container or the host machine:
+
+```sh
+ip route
+
+docker network inspect bridge
+```
+
 ```yml
 # /home/gympasser/projects/chat-gpt-whatsapp/nextjs/docker-compose.yaml
 services:
